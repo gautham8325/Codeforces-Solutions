@@ -28,5 +28,6 @@ public class Strong_password {
                 System.out.println(g);
             }
         }
+        in.close();
     }
 }
