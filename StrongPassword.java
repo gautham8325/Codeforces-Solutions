@@ -1,52 +1,34 @@
 import java.util.Scanner;
 
 public class StrongPassword {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int t = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline after the integer input
+	static final String SPECIAL_CHARACTERS = "!@#$%^&*()-+";
 
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < t; i++) {
-            String s = scanner.nextLine();
-            result.append(maximizeTypingTime(s)).append("\n");
-        }
-        
-        System.out.print(result.toString());
-        scanner.close();
-    }
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 
-    // Function to calculate typing time for a given string
-    public static int calculateTypingTime(String s) {
-        int time = 2; // Initial time for the first character
-        for (int i = 1; i < s.length(); i++) {
-            if (s.charAt(i) == s.charAt(i - 1)) {
-                time += 1;
-            } else {
-                time += 2;
-            }
-        }
-        return time;
-    }
+		sc.nextInt();
+		String password = sc.next();
+		System.out.println(solve(password));
 
-    // Function to find the modified string with maximum typing time
-    public static String maximizeTypingTime(String s) {
-        int maxTime = 0;
-        String bestString = s;
+		sc.close();
+	}
 
-        // Try inserting each letter at every position in the string
-        for (int i = 0; i <= s.length(); i++) {
-            for (char ch = 'a'; ch <= 'z'; ch++) {
-                String newString = s.substring(0, i) + ch + s.substring(i);
-                int typingTime = calculateTypingTime(newString);
+	static int solve(String password) {
+		int addNum = 0;
+		if (!password.chars().anyMatch(Character::isDigit)) {
+			addNum++;
+		}
+		if (!password.chars().anyMatch(Character::isLowerCase)) {
+			addNum++;
+		}
+		if (!password.chars().anyMatch(Character::isUpperCase)) {
+			addNum++;
+		}
+		if (!password.chars().anyMatch(ch -> SPECIAL_CHARACTERS.indexOf((char) ch) >= 0)) {
+			addNum++;
+		}
+		addNum = Math.max(addNum, 6 - password.length());
 
-                // Update if we found a new maximum typing time
-                if (typingTime > maxTime) {
-                    maxTime = typingTime;
-                    bestString = newString;
-                }
-            }
-        }
-        return bestString;
-    }
+		return addNum;
+	}
 }
